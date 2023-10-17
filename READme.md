@@ -1,5 +1,5 @@
-Tugas Besar Pengkom K-20 Kelompok 8
-Proyek : Absensi menggunakan KTM
+Tugas Besar Pengkom K-20 Kelompok 8 <br>
+Proyek : Program absensi menggunakan KTM
 
 Nama/NIM: <br>
 Devon Josiah - 16523081 <br>
