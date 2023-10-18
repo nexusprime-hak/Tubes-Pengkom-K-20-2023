@@ -3,21 +3,29 @@ import tkinter as tk
 import json
 import time
 import datetime as dt
+import pandas as pd
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageTk
+
+fakultas_path = "Barcode_project2/fakultas.json"
+kelasPRD_path = "Barcode_project2/kelasPRD.json"
+kelasPRDexcel_path = "Barcode_project2/kelasPRD.xlsx"
+barcode_ico_path = "Barcode_project2/Barcode.ico"
+
+df_kehadiran = pd.read_excel(kelasPRDexcel_path,index_col="NIM")
 
 class WebcamApp:
     def __init__(self, window, window_title):
 
-        with open('fakultas.json','r') as data:
+        with open(fakultas_path,'r') as data:
             self.fakultas = json.load(data)
 
-        with open('kelasPRD.json','r') as data:
+        with open(kelasPRD_path,'r') as data:
             self.nama = json.load(data)
 
         self.window = window
         self.window.title(window_title)
-        self.window.iconbitmap('Barcode.ico')
+        self.window.iconbitmap(barcode_ico_path)
 
         self.vid = cv2.VideoCapture(0)
 
@@ -52,11 +60,15 @@ class WebcamApp:
                 print(f"Fakultas : {self.fakultas[nim_code]}")
                 print(f"Gerbang berhasil dibuka")
                 print(f"waktu absen : {dt.datetime.now()}")
+                df_kehadiran['Status'][int(value[:8])] = "Hadir"
+                df_kehadiran['Waktu Absensi'][int(value[:8])] = dt.datetime.now().strftime("%H:%M:%S")
 
         self.window.after(1, self.update)
 
 # Create a window and pass it to the WebcamApp class
+
 root = tk.Tk()
 app = WebcamApp(root, "QR Scanner")
 
-# JINX
+#bikin pdf berisi absensi sesuai ktm
+df_kehadiran.to_excel(f'excel absensi/Absensi Kehadiran PRD {dt.datetime.now().strftime("%d-%m-%Y pada %H.%M.%S")}.xlsx')
