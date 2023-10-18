@@ -1,23 +1,47 @@
+# Kelompok 8 Tugas Besar Pengenalan Komputasi
+# Anggota :
+# Devon Josiah	                  16523081
+# Muhammad Jibril Ibrahim	      19623277
+# Luckman Fakhmanidris Arvasirri  19623053
+# Hanif Muhammad Assegaf	      16523088
+# Mohammad Najmutstsaqib	      16523228
+
+# Deskripsi :
+# Aplikasi Absensi kehadiran mahasiswa menggunakan qr code. 
+# Aplikasi ini akan mengeluarkan file excel yang berisi nama nim mahasiswa beserta 
+# kehadiran dan waktu absensi mereka.
+# Aplikasi ini kami batasi untuk lingkup mahasiswa yang mengikuti kelas PRD 16 saja 
+# namun dapat dikembangkan sesuai jumlah data mahasiswa yang diberikan
+
+# KAMUS
+# fakultas_path, kelasPRD_path, kelasPRDexcel_path, barcode_ico_path : string = berupa path untuk masing masing file
+# df_kehadiran : pandas.dataframe = dataframe pandas yang berisi nama, nim, kehadiran, dan waktu absensi mahasiswa
+# root : tkinter = sebuah class untuk membuat user interface saat menjalankan python
+# app : WebcamApp = sebuah class untuk mengambil video dari kamera laptop
+
+# import modul yang dibutuhkan
 import cv2
 import tkinter as tk
 import json
 import time
 import datetime as dt
 import pandas as pd
+import beepy
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageTk
 
-fakultas_path = "Barcode_project2/fakultas.json"
-kelasPRD_path = "Barcode_project2/kelasPRD.json"
-kelasPRDexcel_path = "Barcode_project2/kelasPRD.xlsx"
-barcode_ico_path = "Barcode_project2/Barcode.ico"
+# variabel global
+fakultas_path = "Barcode_project2/fakultas.json"         # relative path untuk fakultas.json
+kelasPRD_path = "Barcode_project2/kelasPRD.json"         # relative path untuk kelasPRD.json
+kelasPRDexcel_path = "Barcode_project2/kelasPRD.xlsx"    # relative path untuk kelasPRD.xlsx
+barcode_ico_path = "Barcode_project2/Barcode.ico"        # relative path untuk Barcode.ico
 
-df_kehadiran = pd.read_excel(kelasPRDexcel_path,index_col="NIM")
+df_kehadiran = pd.read_excel(kelasPRDexcel_path,index_col="NIM")   # dataframe dari file kelasPRD.xlsx 
 
-class WebcamApp:
-    def __init__(self, window, window_title):
+class WebcamApp:                                     # class untuk menangkap video kamera
+    def __init__(self, window, window_title):        # fungsi yang dijalankan saat inisiasi kelas
 
-        with open(fakultas_path,'r') as data:
+        with open(fakultas_path,'r') as data:        # membaca file fakultas.json dan memasukkannya ke variabel nama
             self.fakultas = json.load(data)
 
         with open(kelasPRD_path,'r') as data:
@@ -45,8 +69,7 @@ class WebcamApp:
         for i in decode(frame):
             value = i.data.decode('utf-8')
             nim_code = value[:3]
-            time.sleep(1)
-            print(value)
+            time.sleep(0.5)
 
             output = True
             try:
@@ -55,13 +78,11 @@ class WebcamApp:
                 output = False
 
             if len(value) == 16 and output:
-                print(f"Nama : {self.nama[value[:8]]}")
-                print(f"NIM : {value[:8]}")
-                print(f"Fakultas : {self.fakultas[nim_code]}")
-                print(f"Gerbang berhasil dibuka")
-                print(f"waktu absen : {dt.datetime.now()}")
-                df_kehadiran['Status'][int(value[:8])] = "Hadir"
-                df_kehadiran['Waktu Absensi'][int(value[:8])] = dt.datetime.now().strftime("%H:%M:%S")
+                if int(value[:8]) in df_kehadiran.index:
+                    df_kehadiran['Status'][int(value[:8])] = "Hadir"
+                    df_kehadiran['Waktu Absensi'][int(value[:8])] = dt.datetime.now().strftime("%H:%M:%S")
+                    beepy.beep(sound=5)
+                    print("Berhasil hooray")
 
         self.window.after(1, self.update)
 
