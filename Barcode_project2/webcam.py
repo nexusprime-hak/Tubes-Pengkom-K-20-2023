@@ -22,7 +22,6 @@
 # import modul yang dibutuhkan
 import cv2
 import tkinter as tk
-import json
 import time
 import datetime as dt
 import pandas as pd
@@ -31,8 +30,6 @@ from pyzbar.pyzbar import decode
 from PIL import Image, ImageTk
 
 # variabel global
-fakultas_path = "Barcode_project2/fakultas.json"         # relative path untuk fakultas.json
-kelasPRD_path = "Barcode_project2/kelasPRD.json"         # relative path untuk kelasPRD.json
 kelasPRDexcel_path = "Barcode_project2/kelasPRD.xlsx"    # relative path untuk kelasPRD.xlsx
 barcode_ico_path = "Barcode_project2/Barcode.ico"        # relative path untuk Barcode.ico
 
@@ -40,12 +37,10 @@ df_kehadiran = pd.read_excel(kelasPRDexcel_path,index_col="NIM")   # dataframe d
 
 class WebcamApp:                                     # class untuk menangkap video kamera
     def __init__(self, window, window_title):        # fungsi yang dijalankan saat inisiasi kelas
-
-        with open(fakultas_path,'r') as data:        # membaca file fakultas.json dan memasukkannya ke variabel nama
-            self.fakultas = json.load(data)
-
-        with open(kelasPRD_path,'r') as data:
-            self.nama = json.load(data)
+        # KAMUS LOKAL
+        # self : WebcamApp = untuk merujuk ke class ini sendiri
+        # window : tkinter = berupa gui untuk menampilkan video kamera
+        # window_title : string = nama dari gui yang akan ditampilkan
 
         self.window = window
         self.window.title(window_title)
