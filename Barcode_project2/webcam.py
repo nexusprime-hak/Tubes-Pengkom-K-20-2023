@@ -58,3 +58,5 @@ class WebcamApp:
 # Create a window and pass it to the WebcamApp class
 root = tk.Tk()
 app = WebcamApp(root, "QR Scanner")
+
+# JINX
