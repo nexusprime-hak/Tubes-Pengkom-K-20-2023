@@ -82,7 +82,6 @@ class WebcamApp:                                     # class untuk menangkap vid
         self.window.after(1, self.update)
 
 # membuat window gui lalu dimasukkan ke WebcamApp
-
 root = tk.Tk()
 app = WebcamApp(root, "QR Scanner")
 
