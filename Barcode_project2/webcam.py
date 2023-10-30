@@ -85,5 +85,5 @@ class WebcamApp:                                     # class untuk menangkap vid
 root = tk.Tk()
 app = WebcamApp(root, "QR Scanner")
 
-#bikin pdf berisi absensi sesuai ktm
+#membuat file excel berisi absensi sesuai ktm
 df_kehadiran.to_excel(f'Barcode_project2/excel absensi/Absensi Kehadiran PRD {dt.datetime.now().strftime("%d-%m-%Y pada %H.%M.%S")}.xlsx')
